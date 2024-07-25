@@ -1,5 +1,7 @@
 # Pipeline_Metabarcoding
 
+> Laboratorio de Genómica y Bioinformática de la Bioindiversidad
+
 ## Carpeta de trabajo de proyecto
 
 /media/prosopis/E/LGBB/Server/Virome_project_10_07_24/VIRALG/20231116_2135_MC-112831_AQZ121_7223a9ab
