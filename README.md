@@ -4,11 +4,41 @@
 
 ## Carpeta de trabajo de proyecto
 
-/media/prosopis/E/LGBB/Server/Virome_project_10_07_24/VIRALG/20231116_2135_MC-112831_AQZ121_7223a9ab
+Verificar la ruta absoluto de cada usuario:
 
-## Obtención del programa dorado
+```
+/media/prosopis/E/LGBB/Server/Usuario
+```
 
-Página web: https://github.com/nanoporetech/dorado
+## Pre-Procesamiento
+
+### POD5 v.0.3.12
+
+Convertir fast5 a pod5 antes del basecalling
+
+#### Instalación
+
+Para usuarios.
+
+```
+pip install pod5
+```
+
+#### Ejecución
+
+Para lecturas fast5 que son pass.
+```
+pod5 convert fast5 fast5_pass/*.fast5 --output converted_pass.pod5
+```
+
+Para lecturas fast5 que son pass.
+```
+pod5 convert fast5 fast5_fail/*.fast5 --output converted_fail.pod5
+```
+
+### Dorado v.0.7.2
+
+#### Obtención
 
 ```
 pwd # /home/user/
@@ -17,7 +47,9 @@ cd Bioprograms
 wget https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.7.2-linux-x64.tar.gz
 ```
 
-## Descomprimir el programa
+#### Descomprimir
+
+Solo para superusuario.
 
 ```
 tar xvfz dorado-0.7.2-linux-x64.tar.gz
@@ -28,43 +60,14 @@ sudo ln -s /media/prosopis/E/LGBB/Server/Bioprograms/dorado-0.7.2-linux-x64/bin/
 dorado --help
 ```
 
-## Instalar POD5
-
-Convertir fast5 a pod5 antes del basecalling
+#### Descarga de modelos 
 
 ```
-pip install pod5 (A nivel de usuario)
-```
-
-```
-sudo pip install virtualenv 
-sudo mkdir -p /opt/virtualenvs
-sudo virtualenv /opt/virtualenvs/globalenv
-sudo /opt/virtualenvs/globalenv/bin/pip install pod5 
-
-# Cualquier usuario puede activar el entorno virtual para usar pod5:
-source /opt/virtualenvs/globalenv/bin/activate
-```
-
-## Ejecutar POD5
-
-```
-pod5 convert fast5 fast5_pass/*.fast5 --output converted_pass.pod5
-
-pod5 convert fast5 fast5_fail/*.fast5 --output converted_fail.pod5
-```
-
-## Descargar modelos con dorado
-
-```
+ml dorado (A nivel de usuario)
 dorado download
 ```
 
-## Realizamos el llamado de las bases
-
-```
-dorado basecaller hac converted.pod5 > calls.bam
-```
+#### Ejecución
 
 ```
 dorado basecaller sup converted_pass.pod5 > calls_pass.bam
@@ -92,38 +95,31 @@ dorado basecaller sup converted_fail.pod5 > calls_fail.bam
 [2024-07-16 13:00:42.782] [info] > Finished
 ```
 
-## Realizamos el trimado de las secuencias
-
+#### Trimado
 ```
 dorado trim calls_fail.bam > trimmed_fail.bam
 
 dorado trim calls_pass.bam > trimmed_pass.bam
 ```
 
-## Obtuvimos el resumen de la secuenciación 
+#### Obtención de estadísticas
 
 ```
 dorado summary trimmed_fail.bam > summary_fail.tsv 
+```
 
+```
 dorado summary trimmed_pass.bam > summary_pass.tsv 
 ```
 
-## Convertimos de bam a fastq
-
-```
-samtools sort -n trimmed_fail.bam -o trimmed_fail_sorted.bam
-bedtools bamtofastq -i trimmed_fail_sorted.bam -fq trimmed_fail_sorted.fastq
-```
+#### Convertimos de bam a fastq
 
 ```
 samtools sort -n trimmed_pass.bam -o trimmed_pass_sorted.bam
 bedtools bamtofastq -i trimmed_pass_sorted.bam -fq trimmed_pass_sorted.fastq
 ```
-# Visualizar calidad de las lecturas
 
-```
-fastqc trimmed_fail_sorted.fastq
-```
+#### Visualizar calidad de las lecturas
 
 ```
 fastqc trimmed_pass_sorted.fastq
