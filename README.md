@@ -71,9 +71,13 @@ samtools sort -n trimmed.bam -o trimmed_sorted.bam
 bedtools bamtofastq -i trimmed_sorted.bam -fq trimmed_sorted.fastq
 ```
 
-## Control de calidad de las lecturas obtenidas
+## Remoción de Adaptadores y Control de Calidad
 
+Usemos Porechop (v0.2.4) para la remoción de adaptadores.
+
+```bash
+ml porechop
+porechop-runner.py -i basecalled/ -o trimmed/
 ```
-
 
 
