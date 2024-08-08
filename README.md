@@ -78,3 +78,19 @@ Usemos Porechop (v0.2.4) para la remoción de adaptadores.
 ml porechop
 porechop-runner.py -i basecalled/ -o trimmed/
 ```
+
+Emplearemos Chopper (v0.8.0) en lugar de Nanofilt para filtrar las secuencias por calidad y longitud
+
+```bash
+ml chopper
+chopper -i trimmed/*.fastq -o filtered.fastq --quality-threshold 10 --min-length 1000
+```
+
+## Estadísticas de Secuencias
+
+Generaremos las estadisticas de las secencias con Nanoplot (v1.42.0)
+
+```bash
+conda install -c bioconda nanoplot (Por usuario)
+nanoplot --fastq filtered.fastq --loglength
+```
