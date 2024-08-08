@@ -8,7 +8,7 @@
 
 Página web: https://github.com/nanoporetech/dorado
 
-```
+```bash
 pwd # /home/user/
 mkdir Bioprograms
 cd Bioprograms
@@ -17,7 +17,7 @@ wget https://cdn.oxfordnanoportal.com/software/analysis/dorado-0.7.2-linux-x64.t
 
 ## Descomprimir el programa
 
-```
+```bash
 tar xvfz dorado-0.7.2-linux-x64.tar.gz
 cd dorado-0.7.2-linux-x64
 cd bin
@@ -30,20 +30,20 @@ dorado --help
 
 Convertir fast5 a pod5 antes del basecalling
 
-```
+```bash
 pip install pod5 (A nivel de usuario)
 ```
 
 ## Ejecutar POD5
 
-```
+```bash
 pod5 convert fast5 fast5/*.fast5 --output converted.pod5
 
 ```
 
 ## Descargar modelos con dorado
 
-```
+```bash
 dorado download
 ```
 
@@ -54,19 +54,18 @@ dorado basecaller sup converted.pod5 > calls.bam
 
 ## Realizamos el trimado de las secuencias
 
-```
+```bash
 dorado trim calls.bam > trimmed.bam
 ```
 
 ## Obtuvimos el resumen de la secuenciación 
 
-```
+```bash
 dorado summary trimmed.bam > summary.tsv 
-
 ```
 ## Convertimos de bam a fastq
 
-```
+```bash
 samtools sort -n trimmed.bam -o trimmed_sorted.bam
 bedtools bamtofastq -i trimmed_sorted.bam -fq trimmed_sorted.fastq
 ```
@@ -79,5 +78,3 @@ Usemos Porechop (v0.2.4) para la remoción de adaptadores.
 ml porechop
 porechop-runner.py -i basecalled/ -o trimmed/
 ```
-
-
