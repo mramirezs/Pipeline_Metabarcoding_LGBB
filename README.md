@@ -94,3 +94,24 @@ Generaremos las estadisticas de las secencias con Nanoplot (v1.42.0)
 conda install -c bioconda nanoplot (Por usuario)
 nanoplot --fastq filtered.fastq --loglength
 ```
+
+
+## Ejecución de NanoCLUST
+
+```bash
+# Descarga del programa
+git clone https://github.com/genomicsITER/NanoCLUST.git
+cd NanoCLUST
+
+
+# Primero necesitamos descargar la base de datos del NCBI
+$ mkdir db db/taxdb
+$ wget https://ftp.ncbi.nlm.nih.gov/blast/db/16S_ribosomal_RNA.tar.gz && tar -xzvf 16S_ribosomal_RNA.tar.gz -C db
+$ wget https://ftp.ncbi.nlm.nih.gov/blast/db/taxdb.tar.gz && tar -xzvf taxdb.tar.gz -C db/taxdb
+
+# Ejecutamos el test para corroborrar la instalación de los programas
+$ cd NanoCLUST/
+$ ls
+$ ml nextflow
+$ nextflow run main.nf -profile test,docker
+```
