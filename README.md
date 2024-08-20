@@ -99,6 +99,12 @@ nanoplot --fastq filtered.fastq --loglength
 ## Ejecución de NanoCLUST
 
 ```bash
+conda install -c conda-forge graphviz
+```
+
+
+
+```bash
 # Descarga del programa
 git clone https://github.com/genomicsITER/NanoCLUST.git
 cd NanoCLUST
