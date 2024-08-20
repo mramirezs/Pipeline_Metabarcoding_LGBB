@@ -120,4 +120,10 @@ $ cd NanoCLUST/
 $ ls
 $ ml nextflow
 $ nextflow run main.nf -profile test,docker
+
+
+
+# Para ejecutar las muestras
+
+$ nextflow run main.nf -profile docker --reads filtered_porechop_48SE_1.fastq --db db/16S_ribosomal_RNA --tax db/taxdb/ --outdir 48SE --multiqc
 ```
