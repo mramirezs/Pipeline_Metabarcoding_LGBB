@@ -190,7 +190,7 @@ $ nextflow run main.nf -profile test,docker
 ```
 
 > **Comentario:** 
-> - `-profile test,docker`: Ejecuta el flujo de trabajo en modo de prueba utilizando Docker para la contenedorización.
+> - `-profile test,docker`: Ejecuta el flujo de trabajo en modo de prueba utilizando Docker para la containerización.
 
 # Para ejecutar las muestras
 
