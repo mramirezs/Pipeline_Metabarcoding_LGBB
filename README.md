@@ -1,4 +1,3 @@
-```markdown
 # Pipeline Metabarcoding
 
 ## Carpeta de trabajo de proyecto
@@ -184,4 +183,3 @@ $ for file in *.fastq; do prefix="${file%.fastq}"; nextflow run ../NanoCLUST/mai
 ```
 
 > **Comentario:** Estas líneas de código ejecutan NanoCLUST en los archivos FASTQ recortados utilizando la base de datos y la base de datos de taxonomía descargadas.
-```
