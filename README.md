@@ -81,7 +81,13 @@ dorado demux --kit-name SQK-16S024 --output-dir barcodes --emit-summary calls.ba
 cd barcodes
 ```
 
-> **Comentario:** Estas líneas de código utilizan `dorado` para realizar el basecalling en el archivo POD5 convertido utilizando el modelo `sup` y los archivos de modelo descargados. Luego, demultiplexa las lecturas en función de los códigos de barras y genera un resumen de la ejecución de secuenciación.
+> **Comentario:** 
+> - `--kit-name SQK-16S024`: Especifica el nombre del kit de secuenciación utilizado.
+> - `--min-qscore 10`: Establece un umbral de calidad mínimo de 10 para las lecturas.
+> - `--barcode-both-ends`: Indica que los códigos de barras están presentes en ambos extremos de las lecturas.
+> - `> calls.bam`: Redirige la salida a un archivo BAM llamado `calls.bam`.
+> - `--output-dir barcodes`: Especifica el directorio de salida para los archivos demultiplexados.
+> - `--emit-summary`: Genera un resumen de la ejecución de secuenciación.
 
 ## Resumen de la secuenciación 
 
@@ -89,7 +95,7 @@ cd barcodes
 for file in *.bam; do prefix="${file%.bam}"; dorado summary "$file" > "${prefix}_summary.tsv"; done
 ```
 
-> **Comentario:** Estas líneas de código generan un resumen para cada archivo BAM en el directorio.
+> **Comentario:** Genera un resumen para cada archivo BAM en el directorio y lo guarda en un archivo TSV.
 
 ## Convertimos de bam a fastq
 
@@ -98,7 +104,9 @@ for file in *.bam; do prefix="${file%.bam}"; samtools sort -n "$file" -o "${pref
 for file in *_sorted.bam; do prefix="${file%.bam}"; bedtools bamtofastq -i "${prefix}.bam" -fq "${prefix}.fastq"; done
 ```
 
-> **Comentario:** Estas líneas de código convierten los archivos BAM ordenados a formato FASTQ utilizando `samtools` y `bedtools`.
+> **Comentario:** 
+> - `samtools sort -n`: Ordena los archivos BAM por nombre de lectura.
+> - `bedtools bamtofastq`: Convierte los archivos BAM ordenados a formato FASTQ.
 
 ## Remoción de Adaptadores y Control de Calidad
 
@@ -111,7 +119,9 @@ ml porechop
 for file in *.fastq; do prefix="${file%_sorted.fastq}"; porechop-runner.py -i "${prefix}_sorted.fastq" -o "${prefix}_trimmed.fastq"; done
 ```
 
-> **Comentario:** Estas líneas de código utilizan `porechop` para recortar adaptadores de los archivos FASTQ.
+> **Comentario:** 
+> - `-i`: Especifica el archivo de entrada.
+> - `-o`: Especifica el archivo de salida después de la remoción de adaptadores.
 
 Emplearemos Chopper (v0.8.0) en lugar de Nanofilt para filtrar las secuencias por calidad y longitud
 
@@ -122,7 +132,11 @@ ml chopper
 for file in *.fastq; do prefix="${file%_trimmed.fastq}"; chopper -i "${prefix}_trimmed.fastq" -c ppa_v2.asm.fasta  --quality 10 --minlength 1000; done
 ```
 
-> **Comentario:** Estas líneas de código utilizan `chopper` para filtrar las lecturas por calidad y longitud.
+> **Comentario:** 
+> - `-i`: Especifica el archivo de entrada.
+> - `-c`: Especifica el archivo de referencia para la corrección.
+> - `--quality 10`: Filtra las lecturas con una calidad mínima de 10.
+> - `--minlength 1000`: Filtra las lecturas con una longitud mínima de 1000 bases.
 
 ## Estadísticas de Secuencias
 
@@ -136,7 +150,9 @@ nanoplot --fastq filtered.fastq --loglength
 for file in *.fastq; do prefix="${file%.fastq}"; NanoPlot --fastq "${prefix}.fastq" --loglength; done
 ```
 
-> **Comentario:** Estas líneas de código instalan y utilizan `NanoPlot` para generar estadísticas de secuencia y gráficos para los archivos FASTQ filtrados.
+> **Comentario:** 
+> - `--fastq`: Especifica el archivo FASTQ de entrada.
+> - `--loglength`: Genera gráficos con el logaritmo de la longitud de las lecturas.
 
 ## Descarga, instalación y Ejecución de NanoCLUST
 
@@ -173,7 +189,8 @@ $ ml nextflow
 $ nextflow run main.nf -profile test,docker
 ```
 
-> **Comentario:** Estas líneas de código ejecutan una prueba para verificar la instalación de NanoCLUST.
+> **Comentario:** 
+> - `-profile test,docker`: Ejecuta el flujo de trabajo en modo de prueba utilizando Docker para la contenedorización.
 
 # Para ejecutar las muestras
 
@@ -182,4 +199,9 @@ cd trimmed
 $ for file in *.fastq; do prefix="${file%.fastq}"; nextflow run ../NanoCLUST/main.nf -profile docker --reads "${prefix}.fastq" --db ../NanoCLUST/db/16S_ribosomal_RNA --tax ../NanoCLUST/db/taxdb/ --outdir ../NanoCLUST/"${prefix}_ouput" --multiqc; done
 ```
 
-> **Comentario:** Estas líneas de código ejecutan NanoCLUST en los archivos FASTQ recortados utilizando la base de datos y la base de datos de taxonomía descargadas.
+> **Comentario:** 
+> - `--reads`: Especifica el archivo de lecturas FASTQ de entrada.
+> - `--db`: Especifica la base de datos de 16S ribosomal RNA.
+> - `--tax`: Especifica la base de datos de taxonomía.
+> - `--outdir`: Especifica el directorio de salida para los resultados.
+> - `--multiqc`: Genera un informe de calidad múltiple con MultiQC.
