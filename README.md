@@ -153,7 +153,31 @@ Emplearemos Chopper (v0.8.0) en lugar de Nanofilt para filtrar las secuencias po
 
 ```bash
 ml chopper
-for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; chopper -i "${prefix}_trimmed.fastq" -c ppa_v2.asm.fasta  --quality 10 --minlength 1000; done
+for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; chopper -i "${prefix}_trimmed.fastq" -c ppa_v2.asm.fasta  --quality 10 --minlength 1000 > "${prefix}_choppered.fastq"; done
+seqkit stats -a -j 4 *_choppered.fastq
+```
+
+```
+file                                  format  type  num_seqs      sum_len  min_len  avg_len  max_len       Q1       Q2     Q3  sum_gap    N50  Q20(%)  Q30(%)
+SQK-16S024_barcode01_choppered.fastq  FASTQ   DNA      1,792    2,511,222    1,001  1,401.4    3,808    1,372  1,424.5  1,459        0  1,430   50.57    8.44
+SQK-16S024_barcode02_choppered.fastq  FASTQ   DNA      1,172    1,627,376    1,002  1,388.5    1,949    1,354    1,419  1,460        0  1,426   50.45    8.44
+SQK-16S024_barcode03_choppered.fastq  FASTQ   DNA      9,586   13,303,098    1,000  1,387.8    2,838    1,368    1,410  1,452        0  1,415   50.49    7.73
+SQK-16S024_barcode04_choppered.fastq  FASTQ   DNA      6,190    8,555,270    1,000  1,382.1    2,091    1,359    1,404  1,448        0  1,407   49.78    7.31
+SQK-16S024_barcode05_choppered.fastq  FASTQ   DNA        566      796,126    1,009  1,406.6    1,937    1,379    1,418  1,458        0  1,420   49.84    7.19
+SQK-16S024_barcode06_choppered.fastq  FASTQ   DNA      2,578    3,628,286    1,001  1,407.4    2,216    1,387    1,420  1,453        0  1,424   51.17     7.4
+SQK-16S024_barcode07_choppered.fastq  FASTQ   DNA      9,342   12,967,582    1,000  1,388.1    2,838    1,377    1,410  1,452        0  1,414   50.47    7.41
+SQK-16S024_barcode08_choppered.fastq  FASTQ   DNA        300      422,882    1,031  1,409.6    1,835    1,392    1,421  1,454        0  1,424   50.02    8.21
+SQK-16S024_barcode09_choppered.fastq  FASTQ   DNA      7,962   10,459,818    1,000  1,313.7    1,961    1,249    1,362  1,396        0  1,371   48.77    6.99
+SQK-16S024_barcode10_choppered.fastq  FASTQ   DNA      9,870   14,414,240    1,000  1,460.4    2,647    1,339    1,396  1,582        0  1,403   49.76    8.02
+SQK-16S024_barcode11_choppered.fastq  FASTQ   DNA      7,158    9,545,696    1,000  1,333.6    2,029    1,256    1,356  1,401        0  1,371    48.3    7.06
+SQK-16S024_barcode12_choppered.fastq  FASTQ   DNA      7,104    9,779,448    1,000  1,376.6    1,996  1,329.5    1,385  1,408        0  1,389   48.57     7.3
+SQK-16S024_barcode13_choppered.fastq  FASTQ   DNA      7,844   10,804,476    1,000  1,377.4    2,675    1,325    1,384  1,406        0  1,388   48.51    7.05
+SQK-16S024_barcode14_choppered.fastq  FASTQ   DNA      7,712   10,628,336    1,000  1,378.2    2,320    1,323    1,387  1,408        0  1,391   48.74    7.72
+SQK-16S024_barcode15_choppered.fastq  FASTQ   DNA      8,266   11,635,032    1,000  1,407.6    2,434    1,340    1,390  1,410        0  1,393   48.77    6.93
+SQK-16S024_barcode16_choppered.fastq  FASTQ   DNA      7,998   11,255,078    1,000  1,407.2    2,054    1,328    1,389  1,413        0  1,395   48.96    7.53
+SQK-16S024_barcode17_choppered.fastq  FASTQ   DNA      9,540   13,195,148    1,000  1,383.1    2,988    1,334    1,389  1,409        0  1,393   48.23    6.72
+SQK-16S024_barcode18_choppered.fastq  FASTQ   DNA      8,302   11,785,060    1,000  1,419.5    2,088    1,341    1,392  1,413        0  1,395   48.78    7.44
+unclassified_choppered.fastq          FASTQ   DNA    361,002  521,939,346    1,002  1,445.8    3,966    1,388    1,401  1,439        0  1,402   51.48    7.81
 ```
 
 > **Comentario:** 
