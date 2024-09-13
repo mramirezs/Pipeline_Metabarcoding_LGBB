@@ -194,8 +194,7 @@ Generaremos las estadisticas de las secencias con Nanoplot (v1.42.0)
 
 ```bash
 conda install -c bioconda nanoplot (Por usuario)
-nanoplot --fastq filtered.fastq --loglength
-for file in *.fastq; do prefix="${file%.fastq}"; NanoPlot --fastq "${prefix}.fastq" --loglength; done
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; NanoPlot --fastq "${prefix}_choppered.fastq" --loglength -o "${prefix}_nanoplot"; done
 ```
 
 > **Comentario:** 
