@@ -153,7 +153,7 @@ Emplearemos Chopper (v0.8.0) en lugar de Nanofilt para filtrar las secuencias po
 
 ```bash
 ml chopper
-for file in *.fastq; do prefix="${file%_trimmed.fastq}"; chopper -i "${prefix}_trimmed.fastq" -c ppa_v2.asm.fasta  --quality 10 --minlength 1000; done
+for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; chopper -i "${prefix}_trimmed.fastq" -c ppa_v2.asm.fasta  --quality 10 --minlength 1000; done
 ```
 
 > **Comentario:** 
