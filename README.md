@@ -243,7 +243,7 @@ $ nextflow run main.nf -profile test,docker
 
 ```bash
 cd trimmed
-$ for file in *.fastq; do prefix="${file%.fastq}"; nextflow run ../NanoCLUST/main.nf -profile docker --reads "${prefix}.fastq" --db ../NanoCLUST/db/16S_ribosomal_RNA --tax ../NanoCLUST/db/taxdb/ --outdir ../NanoCLUST/"${prefix}_ouput" --multiqc; done
+$ for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; nextflow run /home/manuel.ramirez/Bioprograms/NanoCLUST/main.nf -profile docker --reads "${prefix}_choppered.fastq" --db /home/manuel.ramirez/Bioprograms/NanoCLUST/db/16S_ribosomal_RNA --tax /home/manuel.ramirez/Bioprograms/NanoCLUST/db/taxdb/ --outdir "${prefix}_nanoclust" --multiqc; done
 ```
 
 > **Comentario:** 
