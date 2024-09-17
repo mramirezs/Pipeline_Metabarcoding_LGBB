@@ -140,7 +140,7 @@ Usemos Porechop (v0.2.4) para la remoción de adaptadores.
 
 ```bash
 ml porechop
-for file in *.fastq; do prefix="${file%_sorted.fastq}"; porechop-runner.py -i "${prefix}_sorted.fastq" -o "${prefix}_trimmed.fastq"; done
+for file in *.fastq; do prefix="${file%_sorted.fastq}"; porechop-runner.py -i "${prefix}_sorted.fastq" -o "${prefix}_trimmed.fastq" > porechop_salida_estandar.txt; done
 ```
 
 > **Comentario:** 
