@@ -57,6 +57,8 @@ pod5 convert fast5 fast5/*.fast5 --output converted.pod5
 ## Descargar modelos con dorado
 
 ```bash
+mkdir DB
+cd DB
 mkdir dorado_models
 cd dorado_models
 dorado download
