@@ -2,7 +2,7 @@
 
 ## Carpeta de trabajo de proyecto
 
-`/media/prosopis/E/LGBB/Server/user/fast5_files`
+`/media/prosopis/E/LGBB/Server/user/fast5`
 
 > **Comentario:** Es útil especificar la ruta del proyecto para mantener la organización.
 
