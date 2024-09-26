@@ -142,12 +142,35 @@ Usemos Porechop (v0.2.4) para la remoción de adaptadores.
 
 ```bash
 ml porechop
-for file in *.fastq; do prefix="${file%_sorted.fastq}"; porechop-runner.py -i "${prefix}_sorted.fastq" -o "${prefix}_trimmed.fastq" > porechop_salida_estandar.txt; done
+for file in *.fastq; do prefix="${file%_sorted.fastq}"; porechop-runner.py -i "${prefix}_sorted.fastq" -o "${prefix}_trimmed.fastq"; done
+seqkit stats -a -j 4 *_trimmed.fastq > stats_trimmed_fastq.txt
 ```
-
 > **Comentario:** 
 > - `-i`: Especifica el archivo de entrada.
 > - `-o`: Especifica el archivo de salida después de la remoción de adaptadores.
+
+```
+file                                format  type  num_seqs      sum_len  min_len  avg_len  max_len       Q1     Q2       Q3  sum_gap    N50  Q20(%)  Q30(%)
+SQK-16S024_barcode01_trimmed.fastq  FASTQ   DNA      2,232    2,806,626        2  1,257.4    3,808    1,225  1,404  1,453.5        0  1,419   50.81    8.49
+SQK-16S024_barcode02_trimmed.fastq  FASTQ   DNA      1,622    1,899,710        4  1,171.2    1,949      984  1,387    1,451        0  1,412   50.58    8.59
+SQK-16S024_barcode03_trimmed.fastq  FASTQ   DNA     12,734   15,286,054        3  1,200.4    2,838    1,089  1,391    1,441        0  1,405   50.68    7.81
+SQK-16S024_barcode04_trimmed.fastq  FASTQ   DNA      8,438    9,920,380        8  1,175.7    2,091    1,053  1,386    1,432        0  1,399   50.35     7.5
+SQK-16S024_barcode05_trimmed.fastq  FASTQ   DNA        678      868,972       59  1,281.7    1,937    1,333  1,402    1,454        0  1,415   50.02    7.34
+SQK-16S024_barcode06_trimmed.fastq  FASTQ   DNA      3,132    3,986,918        3    1,273    2,216    1,322  1,406    1,448        0  1,416   51.28    7.43
+SQK-16S024_barcode07_trimmed.fastq  FASTQ   DNA     12,376   14,725,908        5  1,189.9    2,838    1,060  1,392    1,442        0  1,406   50.58    7.45
+SQK-16S024_barcode08_trimmed.fastq  FASTQ   DNA        312      436,068       28  1,397.7    1,835  1,388.5  1,419    1,453        0  1,422    50.5    8.42
+SQK-16S024_barcode09_trimmed.fastq  FASTQ   DNA     22,568   18,558,358        2    822.3    1,961      366    886    1,336        0  1,255   51.23    7.88
+SQK-16S024_barcode10_trimmed.fastq  FASTQ   DNA     17,682   19,702,542        3  1,114.3    2,647      723  1,311    1,404        0  1,387   50.87     8.2
+SQK-16S024_barcode11_trimmed.fastq  FASTQ   DNA     13,658   14,513,508        1  1,062.6    2,029      838  1,192    1,383        0  1,336    50.9    7.86
+SQK-16S024_barcode12_trimmed.fastq  FASTQ   DNA     11,828   13,383,462       10  1,131.5    1,996      950  1,334    1,398        0  1,374   50.41    7.71
+SQK-16S024_barcode13_trimmed.fastq  FASTQ   DNA     13,488   15,178,236        1  1,125.3    2,675    915.5  1,323    1,396        0  1,370   50.68    7.65
+SQK-16S024_barcode14_trimmed.fastq  FASTQ   DNA     16,168   15,937,992        2    985.8    2,320      518  1,129    1,391        0  1,356   50.64     8.2
+SQK-16S024_barcode15_trimmed.fastq  FASTQ   DNA     14,306   15,960,920        1  1,115.7    2,434      842  1,338    1,398        0  1,384   50.63    7.35
+SQK-16S024_barcode16_trimmed.fastq  FASTQ   DNA     14,086   15,558,454        2  1,104.5    2,054      819  1,305    1,400        0  1,379   50.69     7.9
+SQK-16S024_barcode17_trimmed.fastq  FASTQ   DNA     17,846   18,802,674        2  1,053.6    2,988      642  1,313    1,398        0  1,378   50.28    7.08
+SQK-16S024_barcode18_trimmed.fastq  FASTQ   DNA     15,846   16,559,930        2  1,045.1    2,088      560  1,305    1,398        0  1,385   50.53    7.87
+unclassified_trimmed.fastq          FASTQ   DNA    467,038  643,878,250        1  1,378.6    3,966    1,386  1,398    1,416        0  1,400   53.51    8.43
+```
 
 Emplearemos Chopper (v0.8.0) en lugar de Nanofilt para filtrar las secuencias por calidad y longitud
 
@@ -202,6 +225,90 @@ for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; NanoPlot --
 > **Comentario:** 
 > - `--fastq`: Especifica el archivo FASTQ de entrada.
 > - `--loglength`: Genera gráficos con el logaritmo de la longitud de las lecturas.
+
+## Clasificación taxonómica con Kraken
+
+- Instalación:
+
+```bash
+cd /opt/apps
+wget https://github.com/DerrickWood/kraken2/archive/v2.1.3.tar.gz  # Reemplaza v2.1.3 con la versión deseada
+tar -xzvf v2.1.3.tar.gz
+
+sudo apt-get update
+sudo apt-get install build-essential libcurl4-openssl-dev zlib1g-dev
+
+cd /opt/apps/kraken2
+./install_kraken2.sh ../kraken2-2.1.3/
+
+mkdir -p /opt/apps/modulefiles/Core/kraken2
+nano 2.1.3.lua
+
+-- -*- lua -*-
+------------------------------------------------------------
+-- kraken2 2.1.3
+------------------------------------------------------------
+
+help([[
+
+        This module configures the environment for kraken2 2.1.3
+
+]])
+
+
+-- local variables
+local version = "2.1.3"
+local base = "/opt/apps/kraken2-" .. version .. "/"
+
+whatis("Name: kraken2")
+whatis("Version: 2.1.3")
+whatis("Keywords: kraken2, Bioinformatics, clasification,taxonomy")
+whatis("Category: Bioinformatics")
+whatis("URL: https://ccb.jhu.edu/software/kraken/")
+whatis("Description: Krake2n is a system for assigning taxonomic labels to short DNA sequences, usually obtained through metagenomic studies.")
+
+-- Enviroment variables
+setenv("NEXTFLOW_VE", version)
+prepend_path("PATH", base)
+```
+
+Ingresamos como usuario y ejecutamos:
+
+```
+ml kraken2
+kraken2 --help
+```
+
+Creamos la base de datos a partir del genoma de Neltuma pallida
+
+```
+mkdir neltuma_pallida_kraken2_db
+mv ppa_v2.asm.fasta neltuma_pallida_kraken2_db/
+sed 's/>/>204979 | /' neltuma_pallida_kraken2_db/ppa_v2.asm.fasta > neltuma_pallida_kraken2_db/ppa_v2_modificado.fasta
+kraken2-build --db neltuma_pallida_kraken2_db --add-to-library neltuma_pallida_kraken2_db/ppa_v2_modificado.fasta
+kraken2-build --download-taxonomy --db neltuma_pallida_kraken2_db/
+kraken2-build --db neltuma_pallida_kraken2_db --build
+```
+
+Ejecución de kraken2:
+
+```
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_choppered.fastq" --output "${prefix}.kraken" --report "${prefix}.report"; done
+
+wget https://raw.githubusercontent.com/marbl/Krona/master/scripts/kreport2krona.py
+
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; python kreport2krona.py -r "${prefix}.report" -o "${prefix}.krona"; done
+
+
+wget https://github.com/marbl/Krona/archive/refs/tags/v2.8.1.tar.gz
+tar xvfz v2.8.1.tar.gz
+sudo ln -s /opt/apps/krona-2.8.1/KronaTools/scripts/ImportTaxonomy.pl /usr/local/bin/ktImportTaxonomy
+
+cd KronaTools
+./updateTaxonomy.sh
+
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; ktImportTaxonomy "${prefix}.krona" -o "${prefix}.html"; done
+```
 
 ## Descarga, instalación y Ejecución de NanoCLUST
 
