@@ -226,19 +226,22 @@ for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; NanoPlot --
 > - `--fastq`: Especifica el archivo FASTQ de entrada.
 > - `--loglength`: Genera gráficos con el logaritmo de la longitud de las lecturas.
 
-## Clasificación taxonómica con Kraken
+## Clasificación taxonómica de las lecturas con Kraken2
 
 - Instalación:
 
 ```bash
 cd /opt/apps
+
 wget https://github.com/DerrickWood/kraken2/archive/v2.1.3.tar.gz  # Reemplaza v2.1.3 con la versión deseada
+
 tar -xzvf v2.1.3.tar.gz
 
 sudo apt-get update
 sudo apt-get install build-essential libcurl4-openssl-dev zlib1g-dev
 
 cd /opt/apps/kraken2
+
 ./install_kraken2.sh ../kraken2-2.1.3/
 
 mkdir -p /opt/apps/modulefiles/Core/kraken2
@@ -290,15 +293,14 @@ kraken2-build --download-taxonomy --db neltuma_pallida_kraken2_db/
 kraken2-build --db neltuma_pallida_kraken2_db --build
 ```
 
-Ejecución de kraken2:
+Ejecución de kraken2 antes de usar Chopper:
 
 ```
-for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_choppered.fastq" --output "${prefix}.kraken" --report "${prefix}.report"; done
+for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_trimmed.fastq" --output "${prefix}.trimmed.kraken" --report "${prefix}.trimmed.report"; done
 
 wget https://raw.githubusercontent.com/marbl/Krona/master/scripts/kreport2krona.py
 
-for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; python kreport2krona.py -r "${prefix}.report" -o "${prefix}.krona"; done
-
+for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; cat "${prefix}.trimmed.kraken" | cut -f 2,3 > "${prefix}.trimmed.krona"; done
 
 wget https://github.com/marbl/Krona/archive/refs/tags/v2.8.1.tar.gz
 tar xvfz v2.8.1.tar.gz
@@ -307,7 +309,17 @@ sudo ln -s /opt/apps/krona-2.8.1/KronaTools/scripts/ImportTaxonomy.pl /usr/local
 cd KronaTools
 ./updateTaxonomy.sh
 
-for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; ktImportTaxonomy "${prefix}.krona" -o "${prefix}.html"; done
+for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; ktImportTaxonomy "${prefix}.trimmed.krona" -o "${prefix}.trimmed.html"; done
+```
+
+Ejecución de kraken2 después de usar Chopper:
+
+```
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_choppered.fastq" --output "${prefix}.choppered.kraken" --report "${prefix}.choppered.report"; done
+
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; cat "${prefix}.choppered.kraken" | cut -f 2,3 > "${prefix}.choppered.krona"; done
+
+for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; ktImportTaxonomy "${prefix}.choppered.krona" -o "${prefix}.choppered.html"; done
 ```
 
 ## Descarga, instalación y Ejecución de NanoCLUST
