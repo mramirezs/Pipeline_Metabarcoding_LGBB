@@ -91,6 +91,21 @@ cd barcodes
 > - `--output-dir barcodes`: Especifica el directorio de salida para los archivos demultiplexados.
 > - `--emit-summary`: Genera un resumen de la ejecución de secuenciación.
 
+```
+cat barcoding_summary.txt | head
+
+filename	read_id	barcode
+converted.pod5	0117390a-08d3-4548-ad37-bbdea086f54b	SQK-16S024_barcode02
+converted.pod5	017d7593-d3df-4c37-941d-2fbb343f47cd	SQK-16S024_barcode02
+converted.pod5	0214a6b5-f1ea-418d-b0f4-2573f31012d8	SQK-16S024_barcode02
+converted.pod5	0355a06e-60bc-438d-8bb6-acadc76b3de4	SQK-16S024_barcode02
+converted.pod5	022ed867-498d-478f-bd99-5546117b2552	SQK-16S024_barcode02
+converted.pod5	02fb5dcf-65da-4123-a894-58fb866e887f	SQK-16S024_barcode02
+converted.pod5	01e37d3d-e728-47c5-96b5-de7c3640e6bc	SQK-16S024_barcode02
+converted.pod5	02c9c525-d8b5-47c1-a5dd-6e88efc21387	SQK-16S024_barcode02
+converted.pod5	01f60196-800e-4dd0-b513-853c6a583ae3	SQK-16S024_barcode02
+```
+
 ## Resumen de la secuenciación 
 
 ```bash
@@ -98,6 +113,19 @@ for file in *.bam; do prefix="${file%.bam}"; dorado summary "$file" > "${prefix}
 ```
 
 > **Comentario:** Genera un resumen para cada archivo BAM en el directorio y lo guarda en un archivo TSV.
+
+```
+filename	read_id	run_id	channel	mux	start_time	duration	template_start	template_duration	sequence_length_template	mean_qscore_template	barcode
+converted.pod5	0117390a-08d3-4548-ad37-bbdea086f54b	8371d699ccb2363baf11e06bf47184641336067a	28	1	19382.4	4.21525	19382.4	4.21525	1343	12.3944	SQK-16S024_barcode02
+converted.pod5	017d7593-d3df-4c37-941d-2fbb343f47cd	8371d699ccb2363baf11e06bf47184641336067a	364	4	19455.5	4.32825	19455.5	4.32825	1459	13.7667	SQK-16S024_barcode02
+converted.pod5	0214a6b5-f1ea-418d-b0f4-2573f31012d8	8371d699ccb2363baf11e06bf47184641336067a	165	3	2941.15	4.40425	2941.15	4.40425	1425	10.4715	SQK-16S024_barcode02
+converted.pod5	0355a06e-60bc-438d-8bb6-acadc76b3de4	8371d699ccb2363baf11e06bf47184641336067a	476	4	20144	2.22075	20144	2.22075	621	13.4812	SQK-16S024_barcode02
+converted.pod5	022ed867-498d-478f-bd99-5546117b2552	8371d699ccb2363baf11e06bf47184641336067a	224	1	6611.75	3.621	6611.75	3.621	1301	10.6204	SQK-16S024_barcode02
+converted.pod5	02fb5dcf-65da-4123-a894-58fb866e887f	8371d699ccb2363baf11e06bf47184641336067a	101	2	17048	4.478	17048	4.478	1350	11.4253	SQK-16S024_barcode02
+converted.pod5	01e37d3d-e728-47c5-96b5-de7c3640e6bc	8371d699ccb2363baf11e06bf47184641336067a	440	4	7330.72	3.80175	7330.72	3.80175	1446	11.2083	SQK-16S024_barcode02
+converted.pod5	02c9c525-d8b5-47c1-a5dd-6e88efc21387	8371d699ccb2363baf11e06bf47184641336067a	468	4	17689.1	4.78125	17689.1	4.78125	1373	12.9938	SQK-16S024_barcode02
+converted.pod5	01f60196-800e-4dd0-b513-853c6a583ae3	8371d699ccb2363baf11e06bf47184641336067a	232	2	11831.6	2.98875	11831.6	2.98875	1061	11.7921	SQK-16S024_barcode02
+```
 
 ## Convertimos de bam a fastq
 
