@@ -141,7 +141,7 @@ seqkit stats -a -j 4 *_sorted.fastq > stats_sorted_fastq.txt
 > - `samtools sort -n`: Ordena los archivos BAM por nombre de lectura.
 > - `bedtools bamtofastq`: Convierte los archivos BAM ordenados a formato FASTQ.
 
-```
+```bash
 file                               format  type  num_seqs      sum_len  min_len  avg_len  max_len       Q1       Q2     Q3  sum_gap    N50  Q20(%)  Q30(%)
 SQK-16S024_barcode01_sorted.fastq  FASTQ   DNA      2,232    2,812,246        2    1,260    3,808    1,230    1,405  1,455        0  1,421   50.76    8.48
 SQK-16S024_barcode02_sorted.fastq  FASTQ   DNA      1,626    1,903,444        4  1,170.6    1,953      980    1,387  1,452        0  1,413   50.53    8.58
@@ -307,14 +307,14 @@ prepend_path("PATH", base)
 
 Ingresamos como usuario y ejecutamos:
 
-```
+```bash
 ml kraken2
 kraken2 --help
 ```
 
 Creamos la base de datos a partir del genoma de Neltuma pallida
 
-```
+```bash
 mkdir neltuma_pallida_kraken2_db
 mv ppa_v2.asm.fasta neltuma_pallida_kraken2_db/
 sed 's/>/>204979 | /' neltuma_pallida_kraken2_db/ppa_v2.asm.fasta > neltuma_pallida_kraken2_db/ppa_v2_modificado.fasta
@@ -325,7 +325,7 @@ kraken2-build --db neltuma_pallida_kraken2_db --build
 
 Ejecución de kraken2 antes de usar Chopper:
 
-```
+```bash
 for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_trimmed.fastq" --output "${prefix}.trimmed.kraken" --report "${prefix}.trimmed.report"; done
 
 wget https://raw.githubusercontent.com/marbl/Krona/master/scripts/kreport2krona.py
@@ -344,7 +344,7 @@ for file in *_trimmed.fastq; do prefix="${file%_trimmed.fastq}"; ktImportTaxonom
 
 Ejecución de kraken2 después de usar Chopper:
 
-```
+```bash
 for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; kraken2 --db neltuma_pallida_kraken2_db --threads 8 --input "${prefix}_choppered.fastq" --output "${prefix}.choppered.kraken" --report "${prefix}.choppered.report"; done
 
 for file in *_choppered.fastq; do prefix="${file%_choppered.fastq}"; cat "${prefix}.choppered.kraken" | cut -f 2,3 > "${prefix}.choppered.krona"; done
