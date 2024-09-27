@@ -115,6 +115,8 @@ for file in *.bam; do prefix="${file%.bam}"; dorado summary "$file" > "${prefix}
 > **Comentario:** Genera un resumen para cada archivo BAM en el directorio y lo guarda en un archivo TSV.
 
 ```
+cat SQK-16S024_barcode02_summary.tsv | head
+
 filename	read_id	run_id	channel	mux	start_time	duration	template_start	template_duration	sequence_length_template	mean_qscore_template	barcode
 converted.pod5	0117390a-08d3-4548-ad37-bbdea086f54b	8371d699ccb2363baf11e06bf47184641336067a	28	1	19382.4	4.21525	19382.4	4.21525	1343	12.3944	SQK-16S024_barcode02
 converted.pod5	017d7593-d3df-4c37-941d-2fbb343f47cd	8371d699ccb2363baf11e06bf47184641336067a	364	4	19455.5	4.32825	19455.5	4.32825	1459	13.7667	SQK-16S024_barcode02
